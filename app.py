@@ -22,7 +22,27 @@ app.config.suppress_callback_exceptions = True
 # Load data from csv
 def load_data():
     # To do: Completar la función 
-    
+    df = pd.read_csv("datos_energia.csv", encoding="utf-8-sig")
+
+    # Detecta la columna de fecha más común en estos datasets
+    candidatos = ["Fecha", "date", "datetime", "timestamp", "local_timestamp", "time"]
+    date_col = next((c for c in candidatos if c in df.columns), None)
+    if date_col is None:
+        # Último recurso: intenta detectar por contenido
+        for c in df.columns:
+            if pd.to_datetime(df[c], errors="coerce").notna().mean() > 0.7:
+                date_col = c
+                break
+    if date_col is None:
+        raise ValueError(f"No encontré columna de fecha en el CSV. Columnas: {list(df.columns)}")
+
+    # Convierte y usa como índice (dayfirst=True por si viene en formato DD/MM/YYYY)
+    df[date_col] = pd.to_datetime(df[date_col], errors="coerce", dayfirst=True)
+    if df[date_col].isna().all():
+        raise ValueError(f"No pude convertir a datetime la columna {date_col}.")
+
+    df = df.set_index(date_col).sort_index()
+    return df
 
 # Cargar datos
 data = load_data()
@@ -240,4 +260,4 @@ def update_output_div(date, hour, proy):
 
 # Run the server
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run(debug=True)
