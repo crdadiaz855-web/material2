@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 
+#CRISTHIAN DIAZ ESTUVO AQUI
 
 
 app = dash.Dash(
