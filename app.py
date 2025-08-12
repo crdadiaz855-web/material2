@@ -9,7 +9,7 @@ import datetime as dt
 
 #CRISTHIAN DIAZ ESTUVO AQUI
 
-
+#CRISTHIAN DIAZ ESTUVO AQUI CAMBIO A REMOTO
 app = dash.Dash(
     __name__,
     meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
